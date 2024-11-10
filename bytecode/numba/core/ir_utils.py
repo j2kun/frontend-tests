@@ -10,8 +10,7 @@ import types as pytypes
 import collections
 import warnings
 
-import bytecode.numba
-from bytecode.numba.core.extending import _Intrinsic
+import bytecode.numba as numba
 from bytecode.numba.core import types, typing, ir, analysis, postproc, rewrites, config
 from bytecode.numba.core.typing.templates import signature
 from bytecode.numba.core.analysis import (compute_live_map, compute_use_defs,
@@ -749,10 +748,6 @@ def has_no_side_effect(rhs, lives, call_table):
             call_list == ['ceil', math] or
             call_list == [max] or
             call_list == [int]):
-            return True
-        elif (isinstance(call_list[0], _Intrinsic) and
-              (call_list[0]._name == 'empty_inferred' or
-               call_list[0]._name == 'unsafe_empty_inferred')):
             return True
         from bytecode.numba.core.registry import CPUDispatcher
         from bytecode.numba.np.linalg import dot_3_mv_check_args
@@ -1616,8 +1611,6 @@ def find_callname(func_ir, expr, typemap=None, definition_finder=get_definition)
             # get the underlying definition of Intrinsic object to be able to
             # find the module effectively.
             # Otherwise, it will return numba.extending
-            if isinstance(def_val, _Intrinsic):
-                def_val = def_val._defn
             if hasattr(def_val, '__module__'):
                 mod_name = def_val.__module__
                 # The reason for first checking if the function is in NumPy's

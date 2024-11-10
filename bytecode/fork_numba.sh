@@ -50,8 +50,12 @@ cd "$CURRENT_DIR"
 sed -i 's/from numba/from bytecode.numba/g' numba/**/*.py
 sed -i 's/import numba/import bytecode.numba/g' numba/**/*.py
 
-# apply patches in patches/
-
+# Apply custom patches
+patch_series=(
+    "patches/errors.patch"
+    "patches/serialize.patch"
+    "patches/intrinsic.patch"
+)
 for patch in patches/*.patch
 do
     # -p2 because this script is run from within $PROJECT_ROOT/bytecode/
