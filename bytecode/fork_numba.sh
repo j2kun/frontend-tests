@@ -84,6 +84,7 @@ patch_series=(
     "patches/serialize.patch"
     "patches/intrinsic.patch"
     "patches/exceptions.patch"
+    "patches/unpack_single_tuple.patch"
 )
 for patch in patches/*.patch
 do
