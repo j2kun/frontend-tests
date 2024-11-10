@@ -5,7 +5,7 @@ import itertools
 
 from types import CodeType, ModuleType
 
-from bytecode.numba.core import errors, utils, serialize
+from bytecode.numba.core import errors, utils
 from bytecode.numba.core.utils import PYVERSION
 
 
@@ -536,7 +536,7 @@ else:
     raise NotImplementedError(PYVERSION)
 
 
-class FunctionIdentity(serialize.ReduceMixin):
+class FunctionIdentity(object):
     """
     A function's identity and metadata.
 

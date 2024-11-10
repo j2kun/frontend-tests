@@ -1,0 +1,22 @@
+diff --git a/bytecode/numba/core/bytecode.py b/bytecode/numba/core/bytecode.py
+index 1cf77df..852c8a7 100644
+--- a/bytecode/numba/core/bytecode.py
++++ b/bytecode/numba/core/bytecode.py
+@@ -5,7 +5,7 @@ import itertools
+ 
+ from types import CodeType, ModuleType
+ 
+-from bytecode.numba.core import errors, utils, serialize
++from bytecode.numba.core import errors, utils
+ from bytecode.numba.core.utils import PYVERSION
+ 
+ 
+@@ -536,7 +536,7 @@ else:
+     raise NotImplementedError(PYVERSION)
+ 
+ 
+-class FunctionIdentity(serialize.ReduceMixin):
++class FunctionIdentity(object):
+     """
+     A function's identity and metadata.
+ 
