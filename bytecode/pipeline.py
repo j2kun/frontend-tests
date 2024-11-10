@@ -1,7 +1,7 @@
 """The compilation pipeline."""
 
-from bytecode.bytecode import ByteCode, FunctionIdentity
-from bytecode.interpreter import Interpreter
+from bytecode.numba.core.bytecode import ByteCode, FunctionIdentity
+from bytecode.numba.core.interpreter import Interpreter
 
 
 def run_compiler(function):
