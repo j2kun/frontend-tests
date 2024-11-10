@@ -14,7 +14,6 @@ files=(
     "numba/core/errors.py"
     "numba/core/interpreter.py"
     "numba/core/ir.py"
-    "numba/core/serialize.py"
     "numba/core/typeconv/__init__.py"
     "numba/core/typeconv/castgraph.py"
     "numba/core/types/__init__.py"
