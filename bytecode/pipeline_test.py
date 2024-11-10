@@ -6,3 +6,4 @@ def test_pipeline():
     return a * a - b * b
 
   result = run_compiler(foo)
+  print(result.dump_to_string())
