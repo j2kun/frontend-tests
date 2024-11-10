@@ -14,6 +14,7 @@ files=(
     "numba/core/errors.py"
     "numba/core/interpreter.py"
     "numba/core/ir.py"
+    "numba/core/ir_utils.py"
     "numba/core/typeconv/__init__.py"
     "numba/core/typeconv/castgraph.py"
     "numba/core/types/__init__.py"
@@ -35,6 +36,7 @@ if [ ! -d "/tmp/numba" ]; then
   git clone git@github.com:numba/numba.git /tmp/numba
 fi
 cd /tmp/numba
+# 0.60.0
 git checkout 53e976f1b0c6683933fa0a93738362914bffc1cd
 
 for file in "${files[@]}"
@@ -43,10 +45,8 @@ do
 done
 
 cd "$CURRENT_DIR"
-rm -rf /tmp/numba
 
 # Fix imports
-
 sed -i 's/from numba/from bytecode.numba/g' numba/**/*.py
 sed -i 's/import numba/import bytecode.numba/g' numba/**/*.py
 
