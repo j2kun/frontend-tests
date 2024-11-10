@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 CURRENT_DIR=$(pwd)
 
 files=(
@@ -13,6 +15,8 @@ files=(
     "numba/core/interpreter.py"
     "numba/core/ir.py"
     "numba/core/serialize.py"
+    "numba/core/typeconv/__init__.py"
+    "numba/core/typeconv/castgraph.py"
     "numba/core/types/__init__.py"
     "numba/core/types/abstract.py"
     "numba/core/types/common.py"
@@ -21,23 +25,17 @@ files=(
     "numba/core/types/functions.py"
     "numba/core/types/iterators.py"
     "numba/core/types/misc.py"
-    "numba/core/types/new_scalars/__init__.py"
-    "numba/core/types/new_scalars/machine_types.py"
-    "numba/core/types/new_scalars/numpy_types.py"
-    "numba/core/types/new_scalars/python_types.py"
-    "numba/core/types/new_scalars/scalars.py"
     "numba/core/types/npytypes.py"
-    "numba/core/types/old_scalars.py"
     "numba/core/types/scalars.py"
     "numba/core/utils.py"
     "numba/misc/__init__.py"
     "numba/misc/special.py"
 )
 
-rm -rf /tmp/numba
-cd /tmp
-git clone git@github.com:numba/numba.git
-cd numba
+if [ ! -d "/tmp/numba" ]; then
+  git clone git@github.com:numba/numba.git /tmp/numba
+fi
+cd /tmp/numba
 git checkout 53e976f1b0c6683933fa0a93738362914bffc1cd
 
 for file in "${files[@]}"
@@ -60,3 +58,5 @@ do
     # -p2 because this script is run from within $PROJECT_ROOT/bytecode/
     patch -p2 < "$patch"
 done
+
+# rm -rf /tmp/numba
