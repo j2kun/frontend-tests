@@ -23,7 +23,7 @@ def _is_numba_core_config_loaded():
     To detect if numba.core.config has been initialized due to circular imports.
     """
     try:
-        numba.core.config
+        bytecode.numba.core.config
     except AttributeError:
         return False
     else:
@@ -350,7 +350,7 @@ else:
     def termcolor():
         global _termcolor_inst
         if _termcolor_inst is None:
-            scheme = themes[numba.core.config.COLOR_SCHEME]
+            scheme = themes[bytecode.numba.core.config.COLOR_SCHEME]
             _termcolor_inst = HighlightColorScheme(scheme)
         return _termcolor_inst
 
@@ -431,7 +431,7 @@ reportable_issue_info = """
 This should not have happened, a problem has occurred in Numba's internals.
 You are currently using Numba version %s.
 %s
-""" % (numba.__version__, feedback_details)
+""" % ("0.60.0", feedback_details)
 
 error_extras = dict()
 error_extras['unsupported_error'] = unsupported_error_info
@@ -873,7 +873,7 @@ def new_error_context(fmt_, *args, **kwargs):
     except Exception as e:
         if use_old_style_errors():
             newerr = errcls(e).add_context(_format_msg(fmt_, args, kwargs))
-            if numba.core.config.FULL_TRACEBACKS:
+            if bytecode.numba.core.config.FULL_TRACEBACKS:
                 tb = sys.exc_info()[2]
             else:
                 tb = None
@@ -882,7 +882,7 @@ def new_error_context(fmt_, *args, **kwargs):
             raise e
         else:
             msg = ("Unknown CAPTURED_ERRORS style: "
-                   f"'{numba.core.config.CAPTURED_ERRORS}'.")
+                   f"'{bytecode.numba.core.config.CAPTURED_ERRORS}'.")
             assert 0, msg
 
 
