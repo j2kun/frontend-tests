@@ -1,0 +1,133 @@
+diff --git a/bytecode/numba/core/interpreter.py b/bytecode/numba/core/interpreter.py
+index 5055df3..50fe70d 100644
+--- a/bytecode/numba/core/interpreter.py
++++ b/bytecode/numba/core/interpreter.py
+@@ -11,7 +11,6 @@ from bytecode.numba.core.ir_utils import get_definition, guard
+ from bytecode.numba.core.utils import (PYVERSION, BINOPS_TO_OPERATORS,
+                               INPLACE_BINOPS_TO_OPERATORS,)
+ from bytecode.numba.core.byteflow import Flow, AdaptDFA, AdaptCFA, BlockKind
+-from bytecode.numba.core.unsafe import eh
+ from bytecode.numba.cpython.unsafe.tuple import unpack_single_tuple
+ 
+ 
+@@ -1619,12 +1618,14 @@ class Interpreter(object):
+     def _insert_try_block_begin(self):
+         """Insert IR-nodes to mark the start of a `try` block.
+         """
+-        self._inject_call(eh.mark_try_block, 'mark_try_block')
++        pass
++        # self._inject_call(eh.mark_try_block, 'mark_try_block')
+ 
+     def _insert_try_block_end(self):
+         """Insert IR-nodes to mark the end of a `try` block.
+         """
+-        self._inject_call(eh.end_try_block, 'end_try_block')
++        pass
++        # self._inject_call(eh.end_try_block, 'end_try_block')
+ 
+     def _insert_exception_variables(self):
+         """Insert IR-nodes to initialize the exception variables.
+@@ -1649,10 +1650,11 @@ class Interpreter(object):
+     def _insert_exception_check(self):
+         """Called before the end of a block to inject checks if raised.
+         """
+-        self._insert_exception_variables()
++        pass
++        # self._insert_exception_variables()
+         # Do exception check
+-        self._inject_call(eh.exception_check, 'exception_check',
+-                          '$exception_check')
++        # self._inject_call(eh.exception_check, 'exception_check',
++        #                  '$exception_check')
+ 
+     def _remove_unused_temporaries(self):
+         """
+@@ -2921,17 +2923,7 @@ class Interpreter(object):
+             out = ir.Expr.unary('not', value=tmp, loc=self.loc)
+             self.store(out, res)
+         elif op == 'exception match':
+-            gv_fn = ir.Global(
+-                "exception_match", eh.exception_match, loc=self.loc,
+-            )
+-            exc_match_name = '$exc_match'
+-            self.store(value=gv_fn, name=exc_match_name, redefine=True)
+-            lhs = self.get(lhs)
+-            rhs = self.get(rhs)
+-            exc = ir.Expr.call(
+-                self.get(exc_match_name), args=(lhs, rhs), kws=(), loc=self.loc,
+-            )
+-            self.store(exc, res)
++            raise NotImplementedError("Exceptions unsupported (j2kun did this!)")
+         else:
+             self._binop(op, lhs, rhs, res)
+ 
+@@ -3066,65 +3058,16 @@ class Interpreter(object):
+         self._op_JUMP_IF(inst, pred=pred, iftrue=True)
+ 
+     def op_CHECK_EXC_MATCH(self, inst, pred, tos, tos1):
+-        gv_fn = ir.Global(
+-            "exception_match", eh.exception_match, loc=self.loc,
+-        )
+-        exc_match_name = '$exc_match'
+-        self.store(value=gv_fn, name=exc_match_name, redefine=True)
+-        lhs = self.get(tos1)
+-        rhs = self.get(tos)
+-        exc = ir.Expr.call(
+-            self.get(exc_match_name), args=(lhs, rhs), kws=(), loc=self.loc,
+-        )
+-        self.store(exc, pred)
++        raise NotImplementedError("Exceptions unsupported (j2kun did this!)")
+ 
+     def op_JUMP_IF_NOT_EXC_MATCH(self, inst, pred, tos, tos1):
+-        truebr = inst.next
+-        falsebr = inst.get_jump_target()
+-        gv_fn = ir.Global(
+-            "exception_match", eh.exception_match, loc=self.loc,
+-        )
+-        exc_match_name = '$exc_match'
+-        self.store(value=gv_fn, name=exc_match_name, redefine=True)
+-        lhs = self.get(tos1)
+-        rhs = self.get(tos)
+-        exc = ir.Expr.call(
+-            self.get(exc_match_name), args=(lhs, rhs), kws=(), loc=self.loc,
+-        )
+-        predicate = self.store(exc, pred)
+-        bra = ir.Branch(cond=predicate, truebr=truebr, falsebr=falsebr,
+-                        loc=self.loc)
+-        self.current_block.append(bra)
++        raise NotImplementedError("Exceptions unsupported (j2kun did this!)")
+ 
+     def op_RERAISE(self, inst, exc):
+-        tryblk = self.dfainfo.active_try_block
+-        if tryblk is not None:
+-            stmt = ir.TryRaise(exception=None, loc=self.loc)
+-            self.current_block.append(stmt)
+-            self._insert_try_block_end()
+-            self.current_block.append(ir.Jump(tryblk['end'], loc=self.loc))
+-        else:
+-            # Numba can't handle this case and it's caught else where, this is a
+-            # runtime guard in case this is reached by unknown means.
+-            msg = (f"Unreachable condition reached (op code RERAISE executed)"
+-                   f"{error_extras['reportable']}")
+-            stmt = ir.StaticRaise(AssertionError, (msg,), self.loc)
+-            self.current_block.append(stmt)
++        raise NotImplementedError("Exceptions unsupported (j2kun did this!)")
+ 
+     def op_RAISE_VARARGS(self, inst, exc):
+-        if exc is not None:
+-            exc = self.get(exc)
+-        tryblk = self.dfainfo.active_try_block
+-        if tryblk is not None:
+-            # In a try block
+-            stmt = ir.TryRaise(exception=exc, loc=self.loc)
+-            self.current_block.append(stmt)
+-            self._insert_try_block_end()
+-            self.current_block.append(ir.Jump(tryblk['end'], loc=self.loc))
+-        else:
+-            # Not in a try block
+-            stmt = ir.Raise(exception=exc, loc=self.loc)
+-            self.current_block.append(stmt)
++        raise NotImplementedError("Exceptions unsupported (j2kun did this!)")
+ 
+     def op_YIELD_VALUE(self, inst, value, res):
+         # initialize index to None.  it's being set later in post-processing

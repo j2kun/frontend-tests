@@ -83,6 +83,7 @@ patch_series=(
     "patches/errors.patch"
     "patches/serialize.patch"
     "patches/intrinsic.patch"
+    "patches/exceptions.patch"
 )
 for patch in patches/*.patch
 do
