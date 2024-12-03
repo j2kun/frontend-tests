@@ -1,4 +1,3 @@
-
 #include "openfhe/pke/openfhe.h"
 
 using namespace lbcrypto;

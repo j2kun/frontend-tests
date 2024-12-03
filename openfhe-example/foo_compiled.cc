@@ -6,6 +6,7 @@ using CiphertextT = ConstCiphertext<DCRTPoly>;
 using CCParamsT = CCParams<CryptoContextBGVRNS>;
 using CryptoContextT = CryptoContext<DCRTPoly>;
 using EvalKeyT = EvalKey<DCRTPoly>;
+using KeyPairT = KeyPair<DCRTPoly>;
 using PlaintextT = Plaintext;
 using PrivateKeyT = PrivateKey<DCRTPoly>;
 using PublicKeyT = PublicKey<DCRTPoly>;
